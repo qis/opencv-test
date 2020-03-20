@@ -28,15 +28,14 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${OpenCV_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenCV_LIBS})
 
 # Install
-install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
+install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION .)
+
+install(CODE [[
+  file(GLOB libraries ${CMAKE_BINARY_DIR}/*.dll)
+  file(INSTALL ${libraries} DESTINATION ${CMAKE_INSTALL_PREFIX})
+]])
 
 # Visual Studio
 if(_CMAKE_USER_CXX_COMPILER_PATH)
   configure_file(res/config/launch.vs.json.in ${CMAKE_SOURCE_DIR}/.vs/launch.vs.json @ONLY LF)
-endif()
-
-# Visual Studio Code
-if(CMAKE_EXPORT_COMPILE_COMMANDS)
-  configure_file(res/config/launch.json.in ${CMAKE_SOURCE_DIR}/.vscode/launch.json @ONLY LF)
-  configure_file(res/config/tasks.json.in ${CMAKE_SOURCE_DIR}/.vscode/tasks.json @ONLY LF)
 endif()
